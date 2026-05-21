@@ -1,0 +1,898 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <title>Оффер №2 · Билет</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,500;1,600&family=Outfit:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+
+    :root {
+      --sky: #060d18;
+      --sky-mid: #0c1a2e;
+      --gold: #c4a574;
+      --gold-bright: #e8d4a8;
+      --teal: #3d8f9b;
+      --teal-soft: rgba(61, 143, 155, 0.22);
+      --cream: #f3ece0;
+      --cream-dark: #e6dcc8;
+      --ink: #141820;
+      --muted: #5a6478;
+      --ok: #2a7d5f;
+      --danger: #b84a52;
+      --ease: cubic-bezier(0.22, 1, 0.36, 1);
+    }
+
+    html {
+      scroll-behavior: smooth;
+      scroll-snap-type: y mandatory;
+    }
+
+    html, body {
+      min-height: 100%;
+      font-family: "Outfit", system-ui, sans-serif;
+      color: var(--ink);
+      background: var(--sky);
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* ── фон: небо + силуэт ── */
+    .sky {
+      position: fixed;
+      inset: 0;
+      z-index: 0;
+      background:
+        radial-gradient(ellipse 120% 60% at 50% -5%, rgba(61, 143, 155, 0.18), transparent 55%),
+        radial-gradient(ellipse 80% 50% at 80% 20%, rgba(196, 165, 116, 0.08), transparent 45%),
+        linear-gradient(180deg, #0a1528 0%, var(--sky) 40%, #040810 100%);
+      pointer-events: none;
+    }
+    .skyline {
+      position: absolute;
+      left: 0; right: 0; bottom: 0;
+      height: 38vh;
+      opacity: 0.55;
+      background:
+        linear-gradient(180deg, transparent 0%, rgba(4, 8, 16, 0.4) 100%),
+        url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1200 200' preserveAspectRatio='none'%3E%3Cpath fill='%23101828' d='M0 200V120h40v80h30V90h50v110h25V70h35v130h40V100h60v100h20V60h45v140h30V85h55v115h25V110h40v90h35V75h50v125h30V95h45v105h40V65h55v135h25V100h35v100h30V80h50v120h40V55h60v145h25V115h45v85h35V90h40v110h30V70h55v130h25V105h50v95h35V85h45v115h30V75h40v125h35V95h55v105h25V60h65v140h30V100h40v100h35V80h50v120h25V110h45v90h40V70h55v130h25V90h35v110h30V100h50v100h40V65h60v135h25V115h45v85h35V95h40v105h30V75h55v125h25V105h50v95h35V85h45v115h30V70h40v130h35V100h55v100h25V80h50v120h40V60h65v140h30V110h45v90h35V85h40v115h30V75h55v125h25V100h50v100h40V70h60v130h25V95h45v105h35V80h50v120h30V110h40v90h35V65h55v135h25V100h45v100h30V85h50v115h25V75h40v125h35V105h55v95h25V90h35v110h30V70h50v130h40V100h60v100h20V200z'/%3E%3C/svg%3E") center bottom / 100% auto no-repeat;
+    }
+    .stars-layer {
+      position: absolute;
+      inset: 0;
+      background-image:
+        radial-gradient(1px 1px at 15% 25%, rgba(255,255,255,.45), transparent),
+        radial-gradient(1px 1px at 85% 15%, rgba(255,255,255,.35), transparent),
+        radial-gradient(1.5px 1.5px at 50% 40%, rgba(232,212,168,.5), transparent),
+        radial-gradient(1px 1px at 70% 60%, rgba(255,255,255,.25), transparent);
+      animation: twinkle 6s ease-in-out infinite alternate;
+    }
+    @keyframes twinkle {
+      from { opacity: 0.5; }
+      to { opacity: 0.85; }
+    }
+
+    /* ── обложка-печать ── */
+    .gate {
+      position: fixed;
+      inset: 0;
+      z-index: 100;
+      display: grid;
+      place-items: center;
+      padding: 24px;
+      background: rgba(4, 10, 20, 0.92);
+      backdrop-filter: blur(12px);
+      transition: opacity 0.9s var(--ease), visibility 0.9s ease, transform 0.9s var(--ease);
+    }
+    .gate.out {
+      opacity: 0;
+      visibility: hidden;
+      pointer-events: none;
+      transform: scale(1.03);
+    }
+    .gate-card {
+      text-align: center;
+      max-width: 320px;
+    }
+    .seal-btn {
+      position: relative;
+      width: 140px;
+      height: 140px;
+      margin: 0 auto 28px;
+      border: none;
+      border-radius: 50%;
+      cursor: pointer;
+      background: radial-gradient(circle at 35% 30%, #8b2638 0%, #5c1528 55%, #3d0f1c 100%);
+      box-shadow:
+        0 0 0 4px rgba(196, 165, 116, 0.35),
+        0 0 0 8px rgba(196, 165, 116, 0.12),
+        0 20px 50px rgba(0,0,0,0.5),
+        inset 0 2px 8px rgba(255,255,255,0.15),
+        inset 0 -4px 12px rgba(0,0,0,0.35);
+      transition: transform 0.35s var(--ease), box-shadow 0.35s ease;
+      animation: sealPulse 2.5s ease-in-out infinite;
+    }
+    .seal-btn::before {
+      content: "№2";
+      position: absolute;
+      inset: 0;
+      display: grid;
+      place-items: center;
+      font-family: "Cormorant Garamond", serif;
+      font-size: 2.4rem;
+      font-weight: 700;
+      color: var(--gold-bright);
+      text-shadow: 0 1px 2px rgba(0,0,0,0.4);
+      letter-spacing: 0.08em;
+    }
+    .seal-btn::after {
+      content: "";
+      position: absolute;
+      inset: 12px;
+      border-radius: 50%;
+      border: 2px dashed rgba(232, 212, 168, 0.35);
+    }
+    .seal-btn:hover { transform: scale(1.04); }
+    .seal-btn:active { transform: scale(0.97); }
+    .seal-btn.breaking {
+      animation: sealBreak 0.7s var(--ease) forwards;
+      pointer-events: none;
+    }
+    @keyframes sealPulse {
+      0%, 100% { box-shadow: 0 0 0 4px rgba(196,165,116,0.35), 0 0 0 8px rgba(196,165,116,0.12), 0 20px 50px rgba(0,0,0,0.5), inset 0 2px 8px rgba(255,255,255,0.15); }
+      50% { box-shadow: 0 0 0 6px rgba(196,165,116,0.45), 0 0 0 14px rgba(196,165,116,0.08), 0 24px 60px rgba(92,21,40,0.35), inset 0 2px 8px rgba(255,255,255,0.2); }
+    }
+    @keyframes sealBreak {
+      0% { transform: scale(1); opacity: 1; }
+      40% { transform: scale(1.15); opacity: 1; }
+      100% { transform: scale(2.2); opacity: 0; }
+    }
+    .gate-title {
+      font-family: "Cormorant Garamond", serif;
+      font-size: 1.75rem;
+      font-weight: 600;
+      color: var(--gold-bright);
+      letter-spacing: 0.06em;
+      margin-bottom: 8px;
+    }
+    .gate-sub {
+      font-size: 0.9rem;
+      color: rgba(232, 212, 168, 0.65);
+      font-weight: 500;
+      letter-spacing: 0.04em;
+    }
+
+    /* ── прогресс сбоку (desktop) ── */
+    .progress-rail {
+      position: fixed;
+      left: max(12px, env(safe-area-inset-left));
+      top: 50%;
+      transform: translateY(-50%);
+      z-index: 50;
+      display: none;
+      flex-direction: column;
+      gap: 14px;
+    }
+    @media (min-width: 900px) {
+      .progress-rail { display: flex; }
+      main { padding-left: 56px; }
+    }
+    .progress-rail button {
+      border: none;
+      background: none;
+      cursor: pointer;
+      font-family: "Outfit", sans-serif;
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: rgba(232, 212, 168, 0.35);
+      padding: 4px 0;
+      text-align: left;
+      transition: color 0.3s ease;
+    }
+    .progress-rail button.on { color: var(--gold-bright); }
+    .progress-rail button:hover { color: rgba(232, 212, 168, 0.7); }
+
+    /* ── секции ── */
+    main {
+      position: relative;
+      z-index: 2;
+    }
+
+    .chapter {
+      min-height: 100dvh;
+      scroll-snap-align: start;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: max(20px, env(safe-area-inset-top)) 16px max(20px, env(safe-area-inset-bottom));
+    }
+
+    .ticket {
+      width: min(420px, 100%);
+      position: relative;
+      background: var(--cream);
+      border-radius: 4px;
+      box-shadow:
+        0 40px 100px rgba(0, 0, 0, 0.45),
+        0 0 0 1px rgba(196, 165, 116, 0.25);
+      overflow: hidden;
+      animation: ticketIn 0.85s var(--ease) both;
+    }
+    @keyframes ticketIn {
+      from { opacity: 0; transform: translateY(28px) rotate(-0.5deg); }
+      to { opacity: 1; transform: none; }
+    }
+
+    /* перфорация */
+    .ticket::before,
+    .ticket::after {
+      content: "";
+      position: absolute;
+      left: 0; right: 0;
+      height: 12px;
+      background:
+        radial-gradient(circle at 6px 6px, var(--sky) 5px, transparent 5px);
+      background-size: 12px 12px;
+      z-index: 3;
+    }
+    .ticket::before { top: -6px; }
+    .ticket::after { bottom: -6px; }
+
+    .ticket-header {
+      padding: 22px 24px 16px;
+      border-bottom: 2px dashed rgba(20, 24, 32, 0.12);
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 12px;
+      background: linear-gradient(180deg, #faf6ee 0%, var(--cream) 100%);
+    }
+    .ticket-meta {
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--teal);
+    }
+    .ticket-num {
+      font-family: "Cormorant Garamond", serif;
+      font-size: 2rem;
+      font-weight: 700;
+      line-height: 1;
+      color: var(--ink);
+      letter-spacing: -0.02em;
+    }
+    .ticket-stub {
+      text-align: right;
+      flex-shrink: 0;
+    }
+    .ticket-stub .date {
+      font-family: "Cormorant Garamond", serif;
+      font-size: 1.1rem;
+      font-weight: 600;
+      color: var(--ink);
+    }
+    .ticket-stub .time {
+      font-size: 1.65rem;
+      font-weight: 700;
+      color: var(--teal);
+      letter-spacing: -0.03em;
+      line-height: 1.1;
+    }
+
+    .ticket-body {
+      padding: 20px 24px 24px;
+    }
+
+    .act-label {
+      display: inline-block;
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 10px;
+      padding-bottom: 6px;
+      border-bottom: 1px solid rgba(196, 165, 116, 0.4);
+    }
+
+    h1 {
+      font-family: "Cormorant Garamond", serif;
+      font-size: clamp(1.75rem, 7vw, 2.1rem);
+      font-weight: 600;
+      line-height: 1.2;
+      color: var(--ink);
+      margin-bottom: 14px;
+    }
+
+    .lead {
+      font-size: 1.05rem;
+      line-height: 1.7;
+      color: var(--ink);
+      font-weight: 500;
+      margin-bottom: 14px;
+      letter-spacing: 0.01em;
+    }
+
+    .lead:last-of-type { margin-bottom: 0; }
+
+    .items {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      margin-top: 4px;
+    }
+    .items li {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      padding: 16px;
+      border-radius: 2px;
+      background: rgba(255, 255, 255, 0.45);
+      border: 1px solid rgba(20, 24, 32, 0.08);
+    }
+    .items .tag {
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--teal);
+    }
+    .items .desc {
+      font-size: 1.02rem;
+      font-weight: 500;
+      line-height: 1.6;
+      color: var(--ink);
+    }
+
+    .note-box {
+      margin-top: 16px;
+      padding: 14px 16px;
+      border-radius: 2px;
+      background: var(--teal-soft);
+      border-left: 3px solid var(--teal);
+      font-size: 0.98rem;
+      line-height: 1.65;
+      color: var(--ink);
+      font-weight: 500;
+    }
+
+    .route {
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+      margin-top: 8px;
+    }
+    .route-step {
+      display: grid;
+      grid-template-columns: 28px 1fr;
+      gap: 12px;
+      padding: 12px 0;
+    }
+    .route-dot {
+      width: 12px;
+      height: 12px;
+      margin-top: 4px;
+      border-radius: 50%;
+      background: var(--teal);
+      box-shadow: 0 0 0 3px var(--cream), 0 0 0 4px var(--teal);
+    }
+    .route-step:last-child .route-dot {
+      background: var(--gold);
+      box-shadow: 0 0 0 3px var(--cream), 0 0 0 4px var(--gold);
+    }
+    .route-line {
+      grid-column: 1;
+      width: 2px;
+      height: calc(100% - 8px);
+      margin: 16px auto 0;
+      background: linear-gradient(180deg, var(--teal), var(--gold));
+      opacity: 0.35;
+    }
+    .route-k {
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--teal);
+      margin-bottom: 4px;
+    }
+    .route-v {
+      font-size: 1.05rem;
+      font-weight: 500;
+      line-height: 1.55;
+      color: var(--ink);
+    }
+    .route-v a {
+      color: inherit;
+      text-decoration: none;
+      border-bottom: 1px solid rgba(61, 143, 155, 0.4);
+    }
+    .route-v a:hover { color: var(--teal); border-color: var(--teal); }
+
+    .map-link:focus-visible {
+      outline: 2px solid var(--teal);
+      outline-offset: 2px;
+    }
+
+    .footnote {
+      margin-top: 16px;
+      font-size: 1rem;
+      line-height: 1.55;
+      color: var(--ink);
+      text-align: center;
+      font-weight: 500;
+    }
+
+    /* RSVP */
+    .rsvp-zone {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      margin-top: 8px;
+    }
+    .btn {
+      border: none;
+      border-radius: 2px;
+      padding: 16px 20px;
+      font-family: "Outfit", sans-serif;
+      font-size: 0.92rem;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      cursor: pointer;
+      width: 100%;
+      transition: transform 0.2s var(--ease), filter 0.2s ease;
+    }
+    .btn:hover { transform: translateY(-1px); filter: brightness(1.05); }
+    .btn:active { transform: scale(0.98); }
+
+    .btn-yes {
+      background: linear-gradient(135deg, #2d6a5a 0%, #1e4d42 100%);
+      color: #e8f4ef;
+      box-shadow: 0 12px 32px rgba(30, 77, 66, 0.35);
+    }
+    .btn-no {
+      background: transparent;
+      color: var(--muted);
+      border: 1px dashed rgba(90, 100, 120, 0.4);
+      font-size: 0.8rem;
+      padding: 12px;
+      touch-action: none;
+    }
+
+    .status {
+      min-height: 0;
+      padding: 12px 14px;
+      border-radius: 2px;
+      font-size: 0.9rem;
+      font-weight: 600;
+      line-height: 1.5;
+      color: var(--ok);
+      background: rgba(42, 125, 95, 0.1);
+      border: 1px solid rgba(42, 125, 95, 0.2);
+    }
+    .status:empty { display: none; }
+
+    .decline-toast {
+      display: none;
+      align-items: center;
+      gap: 12px;
+      padding: 12px;
+      border-radius: 2px;
+      background: rgba(184, 74, 82, 0.08);
+      border: 1px solid rgba(184, 74, 82, 0.2);
+    }
+    .decline-toast.vis {
+      display: flex;
+      animation: pop 0.4s var(--ease) both;
+    }
+    @keyframes pop {
+      from { opacity: 0; transform: translateY(8px); }
+      to { opacity: 1; transform: none; }
+    }
+    .decline-toast span {
+      font-family: "Cormorant Garamond", serif;
+      font-style: italic;
+      font-size: 1.1rem;
+      font-weight: 600;
+      color: var(--danger);
+      flex: 1;
+    }
+
+    .nav-row {
+      display: flex;
+      gap: 8px;
+      margin-top: 18px;
+    }
+    .nav-btn {
+      flex: 1;
+      border: 1px solid rgba(20, 24, 32, 0.15);
+      background: rgba(255,255,255,0.5);
+      border-radius: 2px;
+      padding: 12px;
+      font-family: "Outfit", sans-serif;
+      font-size: 0.78rem;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--muted);
+      cursor: pointer;
+      transition: background 0.2s ease, color 0.2s ease;
+    }
+    .nav-btn:hover {
+      background: var(--ink);
+      color: var(--cream);
+      border-color: var(--ink);
+    }
+    .nav-btn.primary {
+      background: var(--ink);
+      color: var(--cream);
+      border-color: var(--ink);
+    }
+
+    .barcode {
+      margin-top: 20px;
+      padding-top: 16px;
+      border-top: 2px dashed rgba(20, 24, 32, 0.1);
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+      gap: 12px;
+    }
+    .barcode-lines {
+      flex: 1;
+      height: 36px;
+      background: repeating-linear-gradient(
+        90deg,
+        var(--ink) 0px,
+        var(--ink) 2px,
+        transparent 2px,
+        transparent 5px,
+        var(--ink) 5px,
+        var(--ink) 6px,
+        transparent 6px,
+        transparent 10px
+      );
+      opacity: 0.75;
+    }
+    .barcode-text {
+      font-size: 8px;
+      font-weight: 700;
+      letter-spacing: 0.15em;
+      color: var(--muted);
+      text-transform: uppercase;
+      writing-mode: vertical-rl;
+      transform: rotate(180deg);
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      html { scroll-behavior: auto; }
+      .seal-btn, .stars-layer, .ticket { animation: none !important; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="sky" aria-hidden="true">
+    <div class="stars-layer"></div>
+    <div class="skyline"></div>
+  </div>
+
+  <div class="gate" id="gate">
+    <div class="gate-card">
+      <button class="seal-btn" id="sealBtn" type="button" aria-label="Сломать печать и открыть приглашение"></button>
+      <p class="gate-title">Оффер №2</p>
+      <p class="gate-sub">Нажми на печать</p>
+    </div>
+  </div>
+
+  <nav class="progress-rail" id="progressRail" aria-label="Разделы">
+    <button type="button" data-go="0" class="on">Вход</button>
+    <button type="button" data-go="1">Место</button>
+    <button type="button" data-go="2">Программа</button>
+    <button type="button" data-go="3">Встреча</button>
+    <button type="button" data-go="4">Ответ</button>
+  </nav>
+
+  <main id="main">
+
+    <section class="chapter" id="ch0" data-ch="0">
+      <article class="ticket">
+        <header class="ticket-header">
+          <div>
+            <div class="ticket-meta">Приглашение · Москва</div>
+            <div class="ticket-num">Свидание</div>
+          </div>
+          <div class="ticket-stub">
+            <div class="ticket-meta">Оффер</div>
+            <div class="date">№2</div>
+          </div>
+        </header>
+        <div class="ticket-body">
+          <span class="act-label">Акт I · Вход</span>
+          <h1>Приглашение</h1>
+          <p class="lead">
+            Выездное мероприятие «свидание».
+          </p>
+          <p class="lead">
+            С собой — хорошее настроение и желание немного выдохнуть от суеты.
+          </p>
+          <div class="barcode">
+            <div class="barcode-lines" aria-hidden="true"></div>
+            <span class="barcode-text">NON-REFUNDABLE SMILES</span>
+          </div>
+          <div class="nav-row">
+            <button class="nav-btn primary next-ch" type="button">Дальше →</button>
+          </div>
+        </div>
+      </article>
+    </section>
+
+    <section class="chapter" id="ch1" data-ch="1">
+      <article class="ticket">
+        <header class="ticket-header">
+          <div>
+            <div class="ticket-meta">Локация</div>
+            <div class="ticket-num">Место</div>
+          </div>
+          <div class="ticket-stub">
+            <div class="ticket-meta">Этаж</div>
+            <div class="time">22</div>
+          </div>
+        </header>
+        <div class="ticket-body">
+          <span class="act-label">Акт II · Локация</span>
+          <h1>Место</h1>
+          <ul class="items">
+            <li>
+              <span class="tag">Номер</span>
+              <span class="desc">Панорама на МИД</span>
+            </li>
+            <li>
+              <span class="tag">Веранда</span>
+              <span class="desc">22 этаж — закрытая веранда с видом на всю Москву. Подышать и выдохнуть.</span>
+            </li>
+          </ul>
+          <div class="nav-row">
+            <button class="nav-btn prev-ch" type="button">← Назад</button>
+            <button class="nav-btn primary next-ch" type="button">Дальше →</button>
+          </div>
+        </div>
+      </article>
+    </section>
+
+    <section class="chapter" id="ch2" data-ch="2">
+      <article class="ticket">
+        <header class="ticket-header">
+          <div>
+            <div class="ticket-meta">Программа</div>
+            <div class="ticket-num">Вечер</div>
+          </div>
+          <div class="ticket-stub">
+            <div class="ticket-meta">До</div>
+            <div class="time">00</div>
+          </div>
+        </header>
+        <div class="ticket-body">
+          <span class="act-label">Акт III · Программа</span>
+          <h1>Программа</h1>
+          <p class="lead">Всё по желанию — можно меньше и раньше.</p>
+          <ul class="items">
+            <li><span class="tag">Фото</span><span class="desc">Закат и ночная Москва. Ты — модель, я — фотограф — по желанию.</span></li>
+            <li><span class="tag">Виды</span><span class="desc">У окна — вино и разговоры. Веранда — если нужен воздух.</span></li>
+          </ul>
+          <div class="nav-row">
+            <button class="nav-btn prev-ch" type="button">← Назад</button>
+            <button class="nav-btn primary next-ch" type="button">Дальше →</button>
+          </div>
+        </div>
+      </article>
+    </section>
+
+    <section class="chapter" id="ch3" data-ch="3">
+      <article class="ticket">
+        <header class="ticket-header">
+          <div>
+            <div class="ticket-meta">Суббота</div>
+            <div class="ticket-num">23 мая</div>
+          </div>
+          <div class="ticket-stub">
+            <div class="ticket-meta">Время</div>
+            <div class="date">по договорённости</div>
+          </div>
+        </header>
+        <div class="ticket-body">
+          <span class="act-label">Акт IV · Встреча</span>
+          <h1>Точка сбора</h1>
+          <div class="route">
+            <div class="route-step">
+              <div class="route-dot"></div>
+              <div>
+                <div class="route-k">Метро</div>
+                <p class="route-v"><a class="map-link" href="https://yandex.ru/maps/?text=метро%20Смоленская%20Москва" target="_blank" rel="noopener noreferrer">Смоленская</a> — встреча по договорённости</p>
+              </div>
+            </div>
+            <div class="route-step">
+              <div class="route-dot"></div>
+              <div>
+                <div class="route-k">Маршрут</div>
+                <p class="route-v">~5 минут пешком до места</p>
+              </div>
+            </div>
+          </div>
+          <div class="nav-row">
+            <button class="nav-btn prev-ch" type="button">← Назад</button>
+            <button class="nav-btn primary next-ch" type="button">К ответу →</button>
+          </div>
+        </div>
+      </article>
+    </section>
+
+    <section class="chapter" id="ch4" data-ch="4">
+      <article class="ticket">
+        <header class="ticket-header">
+          <div>
+            <div class="ticket-meta">Финал</div>
+            <div class="ticket-num">Ответ</div>
+          </div>
+          <div class="ticket-stub">
+            <div class="ticket-meta">Статус</div>
+            <div class="time">?</div>
+          </div>
+        </header>
+        <div class="ticket-body">
+          <span class="act-label">Акт V · Подтверждение</span>
+          <h1>Руководитель?</h1>
+          <p class="lead">Жду твоего ответа.</p>
+
+          <div class="decline-toast" id="declineToast" hidden aria-live="polite">
+            <span id="declineText">Подумай ещё раз.</span>
+          </div>
+
+          <div class="rsvp-zone" id="rsvpZone">
+            <button class="btn btn-yes" id="acceptBtn" type="button">Подтверждаю</button>
+            <button class="btn btn-no" id="declineBtn" type="button">Отказать</button>
+          </div>
+
+          <p class="status" id="statusMsg"></p>
+
+          <div class="barcode">
+            <div class="barcode-lines" aria-hidden="true"></div>
+            <span class="barcode-text">VALID IF SMILING</span>
+          </div>
+        </div>
+      </article>
+    </section>
+
+  </main>
+
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.3/dist/confetti.browser.min.js"></script>
+  <script>
+    const chapters = Array.from(document.querySelectorAll(".chapter"));
+    const railBtns = Array.from(document.querySelectorAll(".progress-rail button"));
+    const gate = document.getElementById("gate");
+    const sealBtn = document.getElementById("sealBtn");
+    const acceptBtn = document.getElementById("acceptBtn");
+    const declineBtn = document.getElementById("declineBtn");
+    const statusMsg = document.getElementById("statusMsg");
+    const declineToast = document.getElementById("declineToast");
+    const declineText = document.getElementById("declineText");
+    const stubTime = document.querySelector("#ch4 .time");
+
+    const PHRASES = [
+      "Подумай ещё раз.",
+      "Оффер не предусматривает отказа. Но мы лояльны.",
+      "Печать уже сломана — назад не откатить.",
+      "Эта кнопка убегает не из вредности. Из скромности.",
+      "Ещё один клик — и я начну нервничать по-настоящему.",
+      "Ладно, снисхождение. Но запас терпения конечен.",
+    ];
+
+    let fleeing = false;
+    let declineIx = 0;
+    let declineShown = false;
+
+    sealBtn.addEventListener("click", () => {
+      sealBtn.classList.add("breaking");
+      setTimeout(() => gate.classList.add("out"), 500);
+      setTimeout(() => {
+        document.getElementById("ch0").scrollIntoView({ behavior: "smooth" });
+      }, 700);
+    });
+
+    function goChapter(i) {
+      chapters[i]?.scrollIntoView({ behavior: "smooth" });
+    }
+
+    document.querySelectorAll(".next-ch").forEach((b) => {
+      b.addEventListener("click", () => {
+        const ch = +b.closest(".chapter").dataset.ch;
+        if (ch < chapters.length - 1) goChapter(ch + 1);
+      });
+    });
+    document.querySelectorAll(".prev-ch").forEach((b) => {
+      b.addEventListener("click", () => {
+        const ch = +b.closest(".chapter").dataset.ch;
+        if (ch > 0) goChapter(ch - 1);
+      });
+    });
+    railBtns.forEach((b) => {
+      b.addEventListener("click", () => goChapter(+b.dataset.go));
+    });
+
+    const obs = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((e) => {
+          if (!e.isIntersecting) return;
+          const i = +e.target.dataset.ch;
+          railBtns.forEach((b, k) => b.classList.toggle("on", k === i));
+        });
+      },
+      { threshold: 0.55 }
+    );
+    chapters.forEach((c) => obs.observe(c));
+
+    function viewportRect() {
+      const vv = window.visualViewport;
+      if (vv) return { x: vv.offsetLeft, y: vv.offsetTop, w: vv.width, h: vv.height };
+      return { x: 0, y: 0, w: innerWidth, h: innerHeight };
+    }
+
+    function flee() {
+      if (!fleeing) {
+        document.body.appendChild(declineBtn);
+        declineBtn.style.position = "fixed";
+        declineBtn.style.zIndex = "9999";
+        declineBtn.style.width = Math.ceil(declineBtn.getBoundingClientRect().width) + "px";
+        fleeing = true;
+      }
+      const m = 12;
+      const r = viewportRect();
+      const w = declineBtn.offsetWidth;
+      const h = declineBtn.offsetHeight;
+      const left = r.x + m + Math.random() * Math.max(0, r.w - w - m * 2);
+      const top = r.y + m + Math.random() * Math.max(0, r.h - h - m * 2);
+      declineBtn.style.left = Math.round(left) + "px";
+      declineBtn.style.top = Math.round(top) + "px";
+    }
+
+    declineBtn.addEventListener("click", (e) => {
+      e.preventDefault();
+      if (!declineShown) {
+        declineShown = true;
+        declineToast.removeAttribute("hidden");
+        declineToast.classList.add("vis");
+      }
+      declineText.textContent = PHRASES[declineIx % PHRASES.length];
+      declineIx++;
+      flee();
+    });
+
+    window.addEventListener("resize", () => fleeing && flee());
+    window.visualViewport?.addEventListener("resize", () => fleeing && flee());
+
+    function boom() {
+      const colors = ["#c4a574", "#3d8f9b", "#f3ece0", "#2d6a5a", "#e8d4a8"];
+      const cfg = { spread: 80, ticks: 200, gravity: 0.9, colors };
+      confetti({ ...cfg, particleCount: 90, origin: { x: 0.5, y: 0.55 } });
+      confetti({ ...cfg, particleCount: 50, angle: 60, origin: { x: 0.15, y: 0.6 } });
+      confetti({ ...cfg, particleCount: 50, angle: 120, origin: { x: 0.85, y: 0.6 } });
+    }
+
+    acceptBtn.addEventListener("click", () => {
+      boom();
+      if (stubTime) stubTime.textContent = "✓";
+      statusMsg.textContent = "Принято. Суббота, 23 мая, м. Смоленская. Время — по договорённости. Жду 🤝";
+      declineToast.classList.remove("vis");
+      acceptBtn.disabled = true;
+      acceptBtn.style.opacity = "0.7";
+    });
+  </script>
+</body>
+</html>
