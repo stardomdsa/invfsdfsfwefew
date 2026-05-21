@@ -41,8 +41,13 @@
     }
 
     body {
-      scroll-snap-type: y mandatory;
+      scroll-snap-type: y proximity;
       -webkit-overflow-scrolling: touch;
+    }
+
+    @media (hover: none) and (pointer: coarse) {
+      body { scroll-snap-type: none; }
+      html { scroll-behavior: auto; }
     }
 
     /* ── романтичный фон ── */
@@ -112,11 +117,14 @@
       transform: scale(1.03);
     }
     .gate-card {
+      position: relative;
+      z-index: 2;
       text-align: center;
       max-width: 320px;
     }
     .seal-btn {
       position: relative;
+      z-index: 5;
       width: 140px;
       height: 140px;
       margin: 0 auto 28px;
@@ -147,6 +155,7 @@
       line-height: 1;
       color: #fff8f5;
       text-shadow: 0 2px 8px rgba(154, 61, 92, 0.5);
+      pointer-events: none;
     }
     .seal-btn::after {
       content: "";
@@ -154,6 +163,7 @@
       inset: 12px;
       border-radius: 50%;
       border: 2px dashed rgba(255, 248, 245, 0.45);
+      pointer-events: none;
     }
     .seal-btn:hover { transform: scale(1.04); }
     .seal-btn:active { transform: scale(0.97); }
@@ -477,7 +487,7 @@
       -webkit-appearance: none;
       appearance: none;
       position: relative;
-      z-index: 11;
+      z-index: 21;
       transition: transform 0.2s var(--ease), filter 0.2s ease;
     }
     .btn:hover { transform: translateY(-1px); filter: brightness(1.05); }
@@ -541,12 +551,17 @@
       flex: 1;
     }
 
+    .nav-row,
+    .rsvp-zone {
+      position: relative;
+      z-index: 20;
+      touch-action: manipulation;
+      isolation: isolate;
+    }
     .nav-row {
       display: flex;
       gap: 8px;
       margin-top: 18px;
-      position: relative;
-      z-index: 10;
     }
     .nav-btn {
       flex: 1;
@@ -566,7 +581,7 @@
       -webkit-appearance: none;
       appearance: none;
       position: relative;
-      z-index: 11;
+      z-index: 21;
       transition: background 0.2s ease, color 0.2s ease;
     }
     .nav-btn:hover {
@@ -917,23 +932,26 @@
     let declineIx = 0;
     let declineShown = false;
 
-    onTap(sealBtn, () => {
-      sealBtn.classList.add("breaking");
-      setTimeout(() => gate.classList.add("out"), 500);
-      setTimeout(() => scrollToChapter(0), 700);
-    });
-
-    const isTouchIOS =
-      /iPad|iPhone|iPod/.test(navigator.userAgent) ||
-      (navigator.platform === "MacIntel" && navigator.maxTouchPoints > 1);
+    function bindAction(btn, fn) {
+      if (!btn) return;
+      let locked = false;
+      btn.addEventListener("click", (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        if (locked) return;
+        locked = true;
+        setTimeout(() => { locked = false; }, 350);
+        fn();
+      });
+    }
 
     function scrollToChapter(i) {
       const el = chapters[i];
       if (!el) return;
-      const top = el.getBoundingClientRect().top + window.scrollY;
-      window.scrollTo({
-        top: Math.max(0, top),
-        behavior: isTouchIOS ? "auto" : "smooth",
+      const top = el.offsetTop;
+      window.scrollTo({ top: Math.max(0, top), behavior: "auto" });
+      requestAnimationFrame(() => {
+        el.scrollIntoView({ block: "start", behavior: "auto" });
       });
     }
 
@@ -941,58 +959,26 @@
       scrollToChapter(i);
     }
 
-    function onTap(btn, fn) {
-      let touchMoved = false;
-      let busy = false;
-      const run = () => {
-        if (busy) return;
-        busy = true;
-        setTimeout(() => { busy = false; }, 400);
-        fn();
-      };
-      btn.addEventListener(
-        "touchstart",
-        () => {
-          touchMoved = false;
-        },
-        { passive: true }
-      );
-      btn.addEventListener(
-        "touchmove",
-        () => {
-          touchMoved = true;
-        },
-        { passive: true }
-      );
-      btn.addEventListener(
-        "touchend",
-        (e) => {
-          if (touchMoved) return;
-          e.preventDefault();
-          run();
-        },
-        { passive: false }
-      );
-      btn.addEventListener("click", (e) => {
-        if (e.pointerType === "touch") return;
-        run();
-      });
-    }
+    bindAction(sealBtn, () => {
+      sealBtn.classList.add("breaking");
+      setTimeout(() => gate.classList.add("out"), 500);
+      setTimeout(() => scrollToChapter(0), 700);
+    });
 
     document.querySelectorAll(".next-ch").forEach((b) => {
-      onTap(b, () => {
+      bindAction(b, () => {
         const ch = +b.closest(".chapter").dataset.ch;
         if (ch < chapters.length - 1) goChapter(ch + 1);
       });
     });
     document.querySelectorAll(".prev-ch").forEach((b) => {
-      onTap(b, () => {
+      bindAction(b, () => {
         const ch = +b.closest(".chapter").dataset.ch;
         if (ch > 0) goChapter(ch - 1);
       });
     });
     railBtns.forEach((b) => {
-      onTap(b, () => goChapter(+b.dataset.go));
+      bindAction(b, () => goChapter(+b.dataset.go));
     });
 
     const obs = new IntersectionObserver(
@@ -1031,7 +1017,7 @@
       declineBtn.style.top = Math.round(top) + "px";
     }
 
-    onTap(declineBtn, () => {
+    bindAction(declineBtn, () => {
       if (!declineShown) {
         declineShown = true;
         declineToast.removeAttribute("hidden");
@@ -1053,7 +1039,7 @@
       confetti({ ...cfg, particleCount: 50, angle: 120, origin: { x: 0.85, y: 0.6 } });
     }
 
-    onTap(acceptBtn, () => {
+    bindAction(acceptBtn, () => {
       if (acceptBtn.disabled) return;
       boom();
       if (stubTime) stubTime.textContent = "✓";
